@@ -1,6 +1,6 @@
 {
   "name": "sortly-markham",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -9,14 +9,14 @@
     "preview": "vite preview --host 0.0.0.0",
     "ios:sync": "npm run build && cap sync ios",
     "ios:open": "cap open ios",
-    "test:ui": "node tests/mobile.mjs"
+    "test:ui": "node tests/mobile.mjs",
+    "test": "node --test tests/classification.test.mjs"
   },
   "dependencies": {
     "@capacitor/camera": "^8.2.6",
     "@capacitor/core": "^8.6.0",
     "@capacitor/ios": "^8.6.0",
-    "@tensorflow-models/mobilenet": "^2.1.1",
-    "@tensorflow/tfjs": "^4.22.0",
+    "@huggingface/transformers": "^3.8.1",
     "lucide-react": "^0.468.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"

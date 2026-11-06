@@ -33,3 +33,13 @@
   .dialog .text-button{min-height:44px}
 }
 .native-app body{overscroll-behavior-y:none}
+
+.recognized-name{background:#eaf1e3;border:1px solid #d3dfc8;border-radius:12px;padding:16px;margin:14px 0}
+.recognized-name h3{font-size:20px;line-height:1.5;margin:8px 0;color:#234d37}
+.recognized-name p{font-size:12px;margin:0;line-height:1.7}
+.recognition-alternatives{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 18px}
+.recognition-alternatives button{min-height:44px;background:#eff2e9;border:1px solid #dce4d4;border-radius:10px;padding:9px 12px;font-size:12px;text-align:left}
+.scan-search-label{display:block;font-size:12px;font-weight:600;margin:16px 0 8px}
+.material-prompt{font-size:11px!important;color:#68795e;margin:14px 0 5px!important}
+.item-english{display:block;font-size:15px;font-weight:500;color:#6b7965;margin-top:5px}
+.item-row small{line-height:1.5}

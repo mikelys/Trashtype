@@ -50,12 +50,14 @@ try {
   assert.match(await page.locator('main').innerText(), /0 items explored/);
   await page.getByRole('button', { name: 'Bin guide', exact: true }).click();
   await page.getByRole('button', { name: 'Green bin', exact: true }).click();
-  assert.equal(await page.locator('.guide-item').count(), 5);
+  assert.equal(await page.locator('.guide-item').count(), 7);
+  assert.match(await page.locator('.guide-items').innerText(), /Eggshells/);
+  assert.ok(!(await page.locator('.guide-items').innerText()).includes('Wooden or bamboo'));
   await page.getByRole('button', { name: 'Sort an item', exact: true }).click();
   await page.getByRole('textbox', { name: 'Search for a waste item' }).fill('unknown-material-123');
   await page.getByRole('link', { name: /check Markham/ }).waitFor();
   // A failed model download must leave a working manual classification path.
-  await page.route(/https:\/\/(tfhub\.dev|storage\.googleapis\.com)\//, route => route.abort());
+  await page.context().route(/https:\/\/(huggingface\.co|cdn\.jsdelivr\.net)\//, route => route.abort());
   await page.locator('input[type=file]').nth(1).setInputFiles('public/apple-touch-icon.png');
   await page.getByText('Image recognition couldn’t load.', { exact: false }).waitFor({ timeout: 30000 });
   await page.getByRole('textbox', { name: 'Confirm item name' }).fill('banana');
@@ -65,7 +67,31 @@ try {
   await page.setViewportSize({ width: 1440, height: 1000 });
   assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
   assert.deepEqual(errors, []);
-  console.log('Passed: mobile layout, camera fallback, search, bin results, persistent/clearable history, filters, unknown item and recognition download failure. Native hardware requires iPhone testing.');
+  // Mock only model output to check name-to-material UI deterministically.
+  const named=await browser.newPage({viewport:{width:390,height:844}});
+  await named.addInitScript(()=>{
+    window.Worker=class extends EventTarget{
+      postMessage({id}){setTimeout(()=>this.dispatchEvent(new MessageEvent('message',{data:{id,type:'result',matches:window.unknownPhoto?[{id:'unknown-scene',score:.9,similarity:.4}]:[{id:'cup',score:.85,similarity:.32},{id:'bottle',score:.05,similarity:.2}]}})),100)}
+      terminate(){}
+    };
+  });
+  await named.goto('http://127.0.0.1:5180');
+  await named.locator('input[type=file]').nth(1).setInputFiles('public/apple-touch-icon.png');
+  await named.getByRole('heading',{name:'杯子 · Cup or mug'}).waitFor();
+  assert.equal(await named.getByRole('textbox',{name:'Confirm item name'}).inputValue(),'cup');
+  assert.match(await named.locator('.modal-results').innerText(),/Paper coffee cup/);
+  await named.locator('.modal-results .item-row').filter({hasText:'Broken ceramic mug'}).click();
+  assert.match(await named.getByRole('dialog').innerText(),/Clear bag/);
+  await named.getByRole('button',{name:'Close dialog'}).click();
+  await named.evaluate(()=>window.unknownPhoto=true);
+  await named.locator('input[type=file]').nth(1).setInputFiles('public/apple-touch-icon.png');
+  await named.getByText('I couldn’t confidently name this item.',{exact:false}).waitFor();
+  assert.equal(await named.locator('.recognized-name').count(),0);
+  assert.equal(await named.locator('.modal-results .item-row').count(),0);
+  await named.getByRole('textbox',{name:'Confirm item name'}).fill('电池');
+  await named.locator('.modal-results .item-row').first().click();
+  assert.match(await named.getByRole('dialog').innerText(),/Drop-off/);
+  console.log('Passed: mobile layout, Chinese/English search, camera fallback, persisted history, filters, failed download recovery, automatic naming, material confirmation and unknown-photo handling.');
 } finally {
   await browser?.close();
   server.kill();
