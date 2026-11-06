@@ -1,0 +1,10 @@
+{
+  "appId": "ca.sortly.markham",
+  "appName": "Sortly",
+  "webDir": "dist",
+  "ios": {
+    "contentInset": "never",
+    "backgroundColor": "#f7f8f4",
+    "preferredContentMode": "mobile"
+  }
+}
