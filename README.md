@@ -2,6 +2,19 @@
 
 将现有 React Web 应用打包为 iOS App，使用 Capacitor 原生容器和 iPhone 系统相机、相册。保留 Web 版本。
 
+## 用 iPhone Safari 测试网页版
+
+测试地址：https://mikelys.github.io/Trashtype/
+
+1. 用 iPhone Safari 打开链接，点击 **Scan an item** 拍照，或 **Or upload a photo** 选择照片。
+2. 第一次识别需要联网下载模型。查看候选物品，确认名称和材质，再查看推荐垃圾桶。
+3. 也可搜索 `coffee cup`（纸杯，蓝桶）或 `banana`（香蕉皮，绿桶）。
+4. Safari 分享菜单 → 添加到主屏幕，即可通过桌面图标打开。
+
+网页版使用系统文件选择器的相机入口；原生相机插件的测试需要安装 iOS App。分类历史仅存于当前浏览器/主屏幕应用，二者可能使用不同存储。照片不会上传。
+
+网页由 `gh-pages` 分支发布，`main` 保留源码。更新源码后运行 `npm run build`，将 `dist` 的内容发布至 `gh-pages` 根目录，并保留 `.nojekyll`。Vite 使用相对资源路径，同时兼容 `/Trashtype/` 子目录和 iOS 的本地资源。
+
 ## 在 iPhone 上运行
 
 需要 Mac、Xcode 26 或更新版本、Node.js 22 或更新版本，以及用于签名的 Apple 账户。最低支持 iOS 15。工程使用 Swift Package Manager，无需 CocoaPods。
