@@ -23,6 +23,21 @@ test('material and condition change the destination for similar-looking objects'
   assert.equal(findItems('鸡蛋壳')[0].bin,'green');
 });
 
+test('a reusable steel waste bin is scrap metal, independently of its liner',()=>{
+  for(const query of ['垃圾桶','不锈钢垃圾桶','铁的垃圾桶','stainless steel trash can']){
+    const result=findItems(query)[0];
+    assert.equal(result.id,'metalbin',query);
+    assert.equal(result.bin,'depot');
+    assert.match(result.destination,/Scrap metal/);
+    assert.match(result.tip,/905-477-5530/);
+    assert.match(result.source,/appliances-metal-items/);
+  }
+  const result=interpretMatches([{id:'wastebin',score:.7,similarity:.3},{id:'bag',score:.2,similarity:.25}]);
+  assert.match(result.name,/垃圾桶本身/);
+  assert.equal(result.candidates[0].itemIds[0],'metalbin');
+  assert.equal(items.find(item=>item.id==='soiledliner').bin,'garbage');
+});
+
 test('image suggestions name objects without deciding an invisible material',()=>{
   const result=interpretMatches([{id:'cup',score:.8,similarity:.28},{id:'bottle',score:.1,similarity:.20}]);
   assert.match(result.name,/杯子/);

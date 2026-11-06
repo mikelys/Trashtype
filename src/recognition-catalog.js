@@ -27,6 +27,7 @@ export const recognitionLabels = [
   {id:'mask', name:'Disposable mask or glove', zh:'一次性口罩 / 手套', query:'mask', itemIds:['mask','glove'], prompt:'a disposable medical face mask or a disposable plastic glove'},
   {id:'cutlery', name:'Wooden or bamboo cutlery', zh:'木质 / 竹制餐具', query:'wooden cutlery', itemIds:['woodcutlery'], prompt:'wooden chopsticks, wooden cutlery or a bamboo stirring stick'},
   {id:'dish', name:'Ceramic plate or bowl', zh:'陶瓷盘 / 碗', query:'ceramic', itemIds:['ceramic'], prompt:'a ceramic plate, a ceramic bowl or broken ceramic dishes'},
+  {id:'wastebin', name:'Waste bin', zh:'垃圾桶本身', query:'垃圾桶', itemIds:['metalbin'], prompt:'a household waste bin or trash can, possibly lined with a plastic bag'},
   {id:'unknown-person', prompt:'a person, a face or a hand without a waste item'},
   {id:'unknown-animal', prompt:'a dog, a cat or another animal'},
   {id:'unknown-scene', prompt:'a landscape, a room, furniture or an empty background'},
@@ -58,6 +59,7 @@ const descriptions={
   electronics:['a mobile phone','a laptop computer','a phone charger','electronic cables'],
   diaper:['a baby diaper'],mask:['a disposable medical face mask','a disposable plastic glove'],
   cutlery:['wooden chopsticks','wooden cutlery','a bamboo stirring stick'],dish:['a ceramic plate','a ceramic bowl','broken ceramic dishes'],
+  wastebin:['a stainless steel kitchen trash can','a metal pedal waste bin','a stainless steel garbage can lined with a plastic bag','a metal wastebasket with a plastic liner','a household trash can'],
 };
 
 export function labelPrompts(label){return (descriptions[label.id]||[label.prompt]).map(text=>`a photo of ${text}.`)}

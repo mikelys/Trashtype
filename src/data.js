@@ -20,6 +20,8 @@ export const items = [
 ];
 
 const extraItems = [
+{id:'soiledliner',name:'Dirty or used garbage-bin liner',zh:'脏污的垃圾桶内衬袋',bin:'garbage',source:'https://www.markham.ca/neighbourhood-services/recycling-garbage/curbside-collection',emoji:'🛍️',tags:'dirty used soiled garbage trash bin liner bag 脏垃圾袋 内衬袋 脏塑料袋 垃圾桶衬袋',tip:'先把袋内物品逐件分类；不要把沾污或装着混合垃圾的内衬袋直接当作塑料包装回收。处理袋子和剩余垃圾时须遵守 Markham 的透明垃圾袋要求，不要用不透明袋作为路边收集袋。',note:'这里处理的是内衬袋，不是金属桶。干净、空的塑料包装袋可另查塑料袋条目；实际路边收集须符合市政府透明袋规定。'},
+{id:'metalbin',name:'Stainless steel or metal waste bin',zh:'不锈钢 / 金属垃圾桶',bin:'depot',destination:'Scrap metal · 废金属回收',source:'https://www.markham.ca/neighbourhood-services/recycling-garbage/appliances-metal-items',emoji:'🗑️',tags:'stainless steel metal iron waste bin trash can garbage can rubbish bin pedal wastebasket dustbin 垃圾桶 铁的垃圾桶 不锈钢的垃圾桶 不锈钢垃圾桶 铁垃圾桶 金属垃圾桶 不锈钢桶 铁桶 脚踏桶',tip:'先取出内衬袋及所有垃圾。小型金属桶可送至 Markham Recycling Depot；大型金属桶请拨 905-477-5530 预约免费金属物品收集。不要把桶本身投入蓝桶或绿桶。 Remove the liner and contents. Take a small metal bin to a Markham Recycling Depot; call 905-477-5530 to book free collection of a large metal item.',note:'这个结果针对桶本身，材质需确认为不锈钢或其他金属。内衬袋、桶内垃圾和可拆卸塑料件分别查询；其他材质的桶请查官方指南。市政府提供小型废金属投放及大型金属预约收集服务。'},
 {id:'takeout',name:'Plastic takeout container',zh:'塑料外卖盒',bin:'blue',emoji:'🥡',tags:'takeout takeaway food container clamshell black plastic lunch box 外卖盒 餐盒 塑料饭盒 黑色塑料盒',tip:'Empty, scrape out food and rinse. Put the plastic packaging loose in the blue box.',note:'Black plastic packaging is accepted under Markham’s 2026 blue box program. Food belongs in the green bin.'},
 {id:'plasticcup',name:'Disposable plastic cup',zh:'一次性塑料杯',bin:'blue',emoji:'🥤',tags:'plastic disposable drink cold cup iced coffee bubble tea boba 塑料杯 奶茶杯 饮料杯',tip:'Empty and rinse the plastic beverage cup. Check any accessories separately.',note:'This is packaging guidance. A reusable ceramic mug or drinking glass has a different disposal route.'},
 {id:'drinkingglass',name:'Broken drinking glass',zh:'破碎玻璃杯',bin:'garbage',emoji:'🥛',tags:'drinking glass tumbler cup broken wine glass 玻璃杯 高脚杯 碎玻璃',tip:'Wrap sharp pieces securely, label them and follow Markham’s clear-bag garbage instructions.',note:'Drinking glasses are different from recyclable glass bottles and jars. Keep usable items for reuse.'},
@@ -64,7 +66,7 @@ export function findItems(query){
     const keywords=tokens(text);
     let score=0;
     for(const word of words){
-      if(text.includes(word)){score+=3;continue}
+      if(text.includes(word)){score+=keywords.includes(word)?5:3;continue}
       // Typo correction applies to English only and never drops unmatched words.
       if(/^[a-z]{4,}$/.test(word)&&keywords.some(key=>oneEdit(word,key))){score+=1;continue}
       return {item,score:0};

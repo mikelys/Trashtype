@@ -71,7 +71,7 @@ try {
   const named=await browser.newPage({viewport:{width:390,height:844}});
   await named.addInitScript(()=>{
     window.Worker=class extends EventTarget{
-      postMessage({id}){setTimeout(()=>this.dispatchEvent(new MessageEvent('message',{data:{id,type:'result',matches:window.unknownPhoto?[{id:'unknown-scene',score:.9,similarity:.4}]:[{id:'cup',score:.85,similarity:.32},{id:'bottle',score:.05,similarity:.2}]}})),100)}
+      postMessage({id}){setTimeout(()=>this.dispatchEvent(new MessageEvent('message',{data:{id,type:'result',matches:window.bagPhoto?[{id:'bag',score:.85,similarity:.32},{id:'wastebin',score:.1,similarity:.22}]:window.unknownPhoto?[{id:'unknown-scene',score:.9,similarity:.4}]:[{id:'cup',score:.85,similarity:.32},{id:'bottle',score:.05,similarity:.2}]}})),100)}
       terminate(){}
     };
   });
@@ -91,6 +91,19 @@ try {
   await named.getByRole('textbox',{name:'Confirm item name'}).fill('电池');
   await named.locator('.modal-results .item-row').first().click();
   assert.match(await named.getByRole('dialog').innerText(),/Drop-off/);
+  await named.getByRole('button',{name:'Close dialog'}).click();
+  await named.evaluate(()=>{window.unknownPhoto=false;window.bagPhoto=true});
+  await named.locator('input[type=file]').nth(1).setInputFiles('public/apple-touch-icon.png');
+  await named.getByRole('button',{name:'🗑️ 垃圾桶本身 · The bin'}).click();
+  await named.locator('.modal-results .item-row').filter({hasText:'Stainless steel or metal waste bin'}).click();
+  assert.match(await named.getByRole('dialog').innerText(),/Scrap metal/);
+  assert.match(await named.getByRole('dialog').innerText(),/905-477-5530/);
+  assert.ok((await named.getByRole('link',{name:'Check official Markham guidance'}).getAttribute('href')).endsWith('appliances-metal-items'));
+  await named.getByRole('button',{name:'Close dialog'}).click();
+  await named.locator('input[type=file]').nth(1).setInputFiles('public/apple-touch-icon.png');
+  await named.getByRole('button',{name:'🛍️ 塑料内衬袋 · The liner'}).click();
+  assert.match(await named.locator('.modal-results').innerText(),/Dirty or used garbage-bin liner/);
+  assert.match(await named.locator('.modal-results').innerText(),/Plastic bag/);
   console.log('Passed: mobile layout, Chinese/English search, camera fallback, persisted history, filters, failed download recovery, automatic naming, material confirmation and unknown-photo handling.');
 } finally {
   await browser?.close();

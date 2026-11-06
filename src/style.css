@@ -43,3 +43,6 @@
 .material-prompt{font-size:11px!important;color:#68795e;margin:14px 0 5px!important}
 .item-english{display:block;font-size:15px;font-weight:500;color:#6b7965;margin-top:5px}
 .item-row small{line-height:1.5}
+
+.object-choice{margin:14px 0;padding:14px;background:#f5f0e4;border:1px solid #e6ddc5;border-radius:12px}
+.object-choice h3{font-size:15px;margin-bottom:8px}.object-choice p{font-size:11px!important}.object-choice .recognition-alternatives{margin-bottom:10px}
